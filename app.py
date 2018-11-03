@@ -59,30 +59,23 @@ def register():
 def trips():
     if request.method == 'POST':
         id = uuid.uuid4()
-        username = request.form['username']
+        username = session['username']
         origin = request.form['origin']
         destination = request.form['destination']
+        seats = request.form['username']
 
         database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}");'.format(id, username, origin, destination))
-        return render_template('trip_list', success='Trip planned successfully')
+        return redirect(url_for('trip', id=id))
 
     return render_template('trip_list.html')
 
 
 @app.route('/trips/new', methods=['GET', 'POST'])
-def plan_trip():
-    if request.method == 'POST':
-        id = uuid.uuid4()
-        origin = request.form['origin']
-        destination = request.form['destination']
-        seats = request.form['seats']
-        username = session['username']
-
-        database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}");'.format(id, username, origin, destination, seats))
-        return redirect(url_for('trip', id=id))
+def new_trip():
     return render_template('trip_form.html')
 
-@app.route('/trips/<id>')
+
+@app.route('/trips/<id>', methods=['GET', 'POST'])
 def trip(id=None):
     return render_template('trip.html')
 

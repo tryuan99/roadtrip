@@ -5,8 +5,7 @@ Plan Trip
 {% endblock %}
 
 {% block content %}
-<p>Trip Form</p>
-<form action="/trips/new" method="post">
+<form action="/trips" method="post">
   <div class="form-group">
     <label for="origin">Start Address</label>
     <input class="form-control" type="text" name="origin">
@@ -21,5 +20,4 @@ Plan Trip
   </div>
   <button type="submit" class="btn btn-success">Submit</button>
 </form>
-
 {% endblock %}
