@@ -6,4 +6,20 @@ Plan Trip
 
 {% block content %}
 <p>Trip Form</p>
+<form action="/trips" method="post">
+  <div class="form-group">
+    <label for="source">Source Address</label>
+    <input class="form-control" type="text" name="source">
+  </div>
+  <div class="form-group">
+    <label for="destination">Destination Address</label>
+    <input class="form-control" type="text" name="destination">
+  </div>
+  <div class="form-group">
+    <label for="seats">Available Seats</label>
+    <input class="form-control" type="number" name="seats">
+  </div>
+  <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
 {% endblock %}
