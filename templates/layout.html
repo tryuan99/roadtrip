@@ -7,30 +7,16 @@
     <title>{% block title %}{% endblock %} - Roadtrip</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <script text="src/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script text="src/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   </head>
   <body>
-    <nav class="navbar fixed-top navbar-expand-md navbar-light bg-light">
-      <div class="container">
-        <a class="navbar-brand" href="/">Roadtrip</a>
-        <div class="collapse navbar-collapse">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/register">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/trips/new">Plan Trip</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/trips">Book Trip</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    {% include 'navbar.html' %}
 
     <div class="container">
       <section class="header" style="margin-top: 80px">
+        {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
+        {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
         <h2>{% block header %}{% endblock %}</h2>
       </section>
       <section class="content">

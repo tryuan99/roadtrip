@@ -1,0 +1,29 @@
+<nav class="navbar fixed-top navbar-expand-md navbar-light bg-light">
+  <div class="container">
+    <a class="navbar-brand" href="/">Roadtrip</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        {% if not username %}
+        <li class="nav-item">
+          <a class="nav-link" href="/register">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Login</a>
+        </li>
+        {% endif %}
+        {% if username %}
+        <li class="nav-item">
+          <a class="nav-link" href="/trips/new">Plan Trip</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/trips">Book Trip</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        <span class="navbar-text">Logged in as {{ username }}</span>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
