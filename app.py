@@ -69,8 +69,16 @@ def trips():
     return render_template('trip_list.html')
 
 
-@app.route('/trips/new', methods=['GET'])
+@app.route('/trips/new', methods=['GET', 'POST'])
 def trip():
+    if request.method == 'POST':
+        id = uuid.uuid4()
+        origin = request.form['origin']
+        destination = request.form['destination']
+        seats = request.form['seats']
+        username = session['username']
+
+        database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}");'.format(id, username, origin, destination, seats))
     return render_template('trip_form.html')
 
 
