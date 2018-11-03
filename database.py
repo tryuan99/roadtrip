@@ -2,7 +2,7 @@ import sqlite3
 import sys
 
 DATABASE_FILE = ':memory:'
-conn = sqlite3.connect(DATABASE_FILE)
+conn = sqlite3.connect(DATABASE_FILE, check_same_thread=False)
 
 
 def logger(f):
