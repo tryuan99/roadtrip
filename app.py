@@ -70,7 +70,7 @@ def trips():
 
 
 @app.route('/trips/new', methods=['GET', 'POST'])
-def trip():
+def plan_trip():
     if request.method == 'POST':
         id = uuid.uuid4()
         origin = request.form['origin']
@@ -79,8 +79,12 @@ def trip():
         username = session['username']
 
         database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}");'.format(id, username, origin, destination, seats))
+        return redirect(url_for('trip', id=id))
     return render_template('trip_form.html')
 
+@app.route('/trips/<id>')
+def trip(id=None):
+    return render_template('trip.html')
 
 @app.errorhandler(404)
 def not_found(error):
