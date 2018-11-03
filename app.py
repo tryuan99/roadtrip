@@ -1,8 +1,9 @@
 from flask import *
 from hashlib import sha256
-import database, uuid
+import config, database, uuid
 
 app = Flask(__name__)
+app.secret_key = config.SECRET_KEY
 
 @app.route('/', methods=['GET'])
 def index():
@@ -14,15 +15,25 @@ def login():
 		username = request.form['username']
 		password = request.form['password']
 
+		record = database.fetchone('SELECT password, salt FROM users WHERE username="{}";'.format(username))
+		if not record:
+			return render_template('login.html', error='Invalid username or password')
 
-		
+		correct_password, salt = record
+		hashed_password = sha256((password + salt).encode()).hexdigest()
+
+		if hashed_password != correct_password:
+			return render_template('login.html', error='Invalid username or password')
+
+		session['username'] = username
 		return redirect(url_for('trips'))
 
 	return render_template('login.html')
 
 @app.route('/logout', methods=['GET'])
 def logout():
-	return 'NOT IMPLEMENTED'
+	session.pop('username', None)
+	return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -33,7 +44,7 @@ def register():
 
 		hashed_password = sha256((password + salt).encode()).hexdigest()
 
-		database.execute('INSERT INTO users VALUES ("{}", "{}", "{}")'.format(username, hashed_password, salt))
+		database.execute('INSERT INTO users VALUES ("{}", "{}", "{}");'.format(username, hashed_password, salt))
 		return render_template('register.html', success='User registered successfully')
 	return render_template('register.html')
 
@@ -45,7 +56,7 @@ def trips():
 		origin = request.form['origin']
 		destination = request.form['destination']
 
-		database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}")'.format(id, username, origin, destination))
+		database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}");'.format(id, username, origin, destination))
 		return render_template('trip_list', success='Trip planned successfully')
 
 	return render_template('trip_list.html')
@@ -53,3 +64,11 @@ def trips():
 @app.route('/trips/new', methods=['GET'])
 def trip():
 	return render_template('trip_form.html')
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('not_found.html'), 404
+
+@app.errorhandler(500)
+def not_found(error):
+    return render_template('error.html', message=error), 500

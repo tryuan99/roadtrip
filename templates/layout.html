@@ -16,7 +16,7 @@
     <div class="container">
       <section class="header" style="margin-top: 80px">
         {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
-        {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+        {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
         <h2>{% block header %}{% endblock %}</h2>
       </section>
       <section class="content">
