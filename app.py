@@ -8,9 +8,12 @@ import requests
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
 
-
 @app.route('/', methods=['GET'])
 def index():
+    if 'username' in session:
+        if session['username']:
+            return redirect(url_for('trips'))
+    session['username'] = None
     return render_template('index.html')
 
 
@@ -33,12 +36,14 @@ def login():
         session['username'] = username
         return redirect(url_for('trips'))
 
+    if session['username']:
+        return redirect(url_for('trips'))
     return render_template('login.html')
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    session.pop('username', None)
+    session['username'] = None
     return redirect(url_for('index'))
 
 
