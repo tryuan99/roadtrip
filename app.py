@@ -83,8 +83,10 @@ def register():
 
 
 @app.route('/trips', methods=['GET', 'POST'])
+@app.route('/trips/<radius><originLat><originLng><destinationLat><destinationLng>', methods=[])
 @login_required
 def trips():
+
     if request.method == 'POST':
         id = uuid.uuid4()
         username = session['username']
@@ -105,6 +107,14 @@ def trips():
             )
         )
         return redirect(url_for('trip', id=id))
+
+
+    radius = request.args.get('radius', None)
+    originLat = request.args.get('originLat', None)
+    originLng = request.args.get('originLng', None)
+    destinationLat = request.args.get('destinationLat', None)
+    destinationLng = request.args.get('destinationLng', None)
+
 
     all_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
     trips = list(map(get_trip_obj, all_trips))
