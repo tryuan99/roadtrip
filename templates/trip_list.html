@@ -14,29 +14,27 @@
             Filter Trips
         </div>
         <div class="card-body">
-            <div class="form-inline">
+            <form action="/trips" method="get" class="form-inline">
                 <div class="form-group">
-                    <input class="form-control" type="text" id="origin-input" name="origin" placeholder="Enter origin">
+                    <input class="form-control" type="text" id="origin-input" name="origin" placeholder="Enter origin" value="{{ filter.origin }}">
                 </div>
 
                 <div class="form-group mx-sm-3">
-                    <input class="form-control" type="text" id="destination-input" name="destination" placeholder="Enter destination">
+                    <input class="form-control" type="text" id="destination-input" name="destination" placeholder="Enter destination" value="{{ filter.destination }}">
                 </div>
 
-                <form action="/trips" method="get" class="form-inline">
-                    <div class="form-group mx-sm-3">
-                        <input class="form-control" type="number" min="0" name="radius" placeholder="Enter radius (miles)" required>
-                    </div>
+                <div class="form-group mx-sm-3">
+                    <input class="form-control" type="number" min="0" name="radius" placeholder="Enter radius (miles)" value="{{ filter.radius or 10 }}">
+                </div>
 
-                    <input type="hidden" id="originLat-input" name="originLat">
-                    <input type="hidden" id="originLng-input" name="originLng">
+                <input type="hidden" id="originLat-input" name="originLat" value="{{ filter.originLat }}">
+                <input type="hidden" id="originLng-input" name="originLng" value="{{ filter.originLng }}">
 
-                    <input type="hidden" id="destinationLat-input" name="destinationLat">
-                    <input type="hidden" id="destinationLng-input" name="destinationLng">
+                <input type="hidden" id="destinationLat-input" name="destinationLat" value="{{ filter.destinationLat }}">
+                <input type="hidden" id="destinationLng-input" name="destinationLng" value="{{ filter.destinationLng }}">
 
-                    <button type="submit" class="btn btn-success">Search</button>
-                </form>
-            </div>
+                <button type="submit" class="btn btn-success">Search</button>
+            </form>
         </div>
     </div>
 
@@ -59,7 +57,7 @@
                 <td>{{ trip.username }}</td>
                 <td>{{ trip.origin }}</td>
                 <td>{{ trip.destination }}</td>
-                <td>{{ trip.seats - passenger_count[trip.id] }}</td>
+                <td>{{ trip.seats - passenger_count.get(trip.id, 0) }}</td>
                 <td>${{ '%.2f'|format(trip.fare) }}</td>
                 <td>{{ trip.date }}</td>
                 <td>{{ trip.time }}</td>
