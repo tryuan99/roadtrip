@@ -10,35 +10,35 @@
 
 {% block content %}
     <div class="card" style="margin-bottom: 20px">
-    	<div class="card-header">
+        <div class="card-header">
             Filter Trips
         </div>
-    	<div class="card-body">
-		    <div class="form-inline">
-		    	<div class="form-group">
-			        <input class="form-control" type="text" id="origin-input" name="origin" placeholder="Enter origin">
-			    </div>
+        <div class="card-body">
+            <div class="form-inline">
+                <div class="form-group">
+                    <input class="form-control" type="text" id="origin-input" name="origin" placeholder="Enter origin">
+                </div>
 
-			    <div class="form-group mx-sm-3">
-			        <input class="form-control" type="text" id="destination-input" name="destination" placeholder="Enter destination">
-			    </div>
+                <div class="form-group mx-sm-3">
+                    <input class="form-control" type="text" id="destination-input" name="destination" placeholder="Enter destination">
+                </div>
 
-		        <form action="/trips" method="get" class="form-inline">
-		        	<div class="form-group mx-sm-3">
-			            <input class="form-control" type="number" min="0" name="radius" placeholder="Enter radius (miles)">
-			        </div>
+                <form action="/trips" method="get" class="form-inline">
+                    <div class="form-group mx-sm-3">
+                        <input class="form-control" type="number" min="0" name="radius" placeholder="Enter radius (miles)">
+                    </div>
 
-		            <input type="hidden" id="originLat-input" name="originLat">
-		            <input type="hidden" id="originLng-input" name="originLng">
+                    <input type="hidden" id="originLat-input" name="originLat">
+                    <input type="hidden" id="originLng-input" name="originLng">
 
-		            <input type="hidden" id="destinationLat-input" name="destinationLat">
-		            <input type="hidden" id="destinationLng-input" name="destinationLng">
+                    <input type="hidden" id="destinationLat-input" name="destinationLat">
+                    <input type="hidden" id="destinationLng-input" name="destinationLng">
 
-		            <button type="submit" class="btn btn-success">Search</button>
-		        </form>
-		    </form>
-		</div>
-	</div>
+                    <button type="submit" class="btn btn-success">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <table class="table table-striped table-hover">
         <thead>
