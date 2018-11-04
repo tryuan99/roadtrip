@@ -66,10 +66,14 @@ def trips():
         date = request.form['date']
         time = request.form['time']
 
-        database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}");'.format(id, username, origin, destination, seats, date, time))
+        database.execute(
+            'INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}");'.format(id, username, origin,
+                                                                                          destination, seats, date,
+                                                                                          time))
         return redirect(url_for('trip', id=id))
 
-    return render_template('trip_list.html')
+    available_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
+    return render_template('trip_list.html', trips=available_trips)
 
 
 @app.route('/trips/new', methods=['GET'])
