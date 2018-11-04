@@ -63,8 +63,10 @@ def trips():
         origin = request.form['origin']
         destination = request.form['destination']
         seats = request.form['seats']
+        date = request.form['date']
+        time = request.form['time']
 
-        database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}");'.format(id, username, origin, destination, seats))
+        database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}");'.format(id, username, origin, destination, seats, date, time))
         return redirect(url_for('trip', id=id))
 
     return render_template('trip_list.html')
@@ -78,6 +80,7 @@ def new_trip():
 @app.route('/trips/<id>', methods=['GET', 'POST'])
 def trip(id=None):
     return render_template('trip.html')
+
 
 @app.errorhandler(404)
 def not_found(error):
