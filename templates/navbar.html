@@ -3,8 +3,11 @@
         <a class="navbar-brand" href="/">
             <img src="{{ url_for('static', filename='img/roadtrip.svg') }}" width="30px" height="30px">
             Roadtrip
-          </a>
-        <div class="collapse navbar-collapse">
+        </a>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="navbar" class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 {% if not session['username'] %}
                     <li class="nav-item">
