@@ -3,7 +3,7 @@
         <a class="navbar-brand" href="/">Roadtrip</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
-                {% if session['username'] is none %}
+                {% if not session['username'] %}
                     <li class="nav-item">
                         <a class="nav-link" href="/register">Register</a>
                     </li>
@@ -22,7 +22,7 @@
                     </li>
                 {% endif %}
             </ul>
-            {% if session['username'] is none %}
+            {% if not session['username'] %}
                 <span class="navbar-text">Logged in as {{ session['username'] }}</span>
             {% endif %}
         </div>
