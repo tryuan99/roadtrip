@@ -9,11 +9,9 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card" style="margin-bottom: 20px">
-        <div class="card-header">
-            Filter Trips
-        </div>
+    <div class="card mb-4">
         <div class="card-body">
+            <h5 class="card-title">Filter Trips</h5>
             <form action="/trips" method="get" class="form-inline">
                 <div class="form-group">
                     <input class="form-control" type="text" id="origin-input" name="origin" placeholder="Enter origin" value="{{ filter.origin }}">
@@ -24,7 +22,12 @@
                 </div>
 
                 <div class="form-group mx-sm-3">
-                    <input class="form-control" type="number" min="0" name="radius" placeholder="Enter radius (miles)" value="{{ filter.radius or 10 }}">
+                    <div class="input-group">
+                        <input class="form-control" type="number" min="0" name="radius" placeholder="Enter radius" value="{{ filter.radius or 10 }}">
+                        <div class="input-group-append">
+                            <span class="input-group-text">mi.</span>
+                        </div>
+                    </div>
                 </div>
 
                 <input type="hidden" id="originLat-input" name="originLat" value="{{ filter.originLat }}">
@@ -38,54 +41,6 @@
         </div>
     </div>
 
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th scope="col">User</th>
-            <th scope="col">Origin</th>
-            <th scope="col">Destination</th>
-            <th scope="col">Seats Remaining</th>
-            <th scope="col">Fare</th>
-            <th scope="col">Departure Date</th>
-            <th scope="col">Departure Time</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for trip in trips %}
-            <tr class="post">
-                <td>{{ trip.username }}</td>
-                <td>{{ trip.origin }}</td>
-                <td>{{ trip.destination }}</td>
-                <td>{{ trip.seats - passenger_count.get(trip.id, 0) }}</td>
-                <td>${{ '%.2f'|format(trip.fare) }}</td>
-                <td>{{ trip.date }}</td>
-                <td>{{ trip.time }}</td>
-                <td><a href="/trips/{{ trip.id }}"><i class="fas fa-arrow-right"></i></a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <script text="src/javascript">
-        function initMap() {
-            function autocomplete(id) {
-                const input = document.getElementById(id + '-input');
-                const autocomplete = new google.maps.places.Autocomplete(input);
-                autocomplete.setFields(['geometry']);
-
-                autocomplete.addListener('place_changed', function() {
-                    const place = autocomplete.getPlace();
-                    const location = place.geometry.location;
-
-                    document.getElementById(id + 'Lat-input').value = location.lat();
-                    document.getElementById(id + 'Lng-input').value = location.lng();
-                });
-            }
-
-            autocomplete('origin');
-            autocomplete('destination');
-        }
-    </script>
-    <script text="src/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}&libraries=places&callback=initMap" async defer></script>
+    {% include 'trip_table.html' %}
+    {% include 'location_input.html' %}
 {% endblock %}

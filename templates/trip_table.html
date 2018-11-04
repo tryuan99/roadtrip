@@ -1,0 +1,28 @@
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">User</th>
+            <th scope="col">Origin</th>
+            <th scope="col">Destination</th>
+            <th scope="col">Seats Remaining</th>
+            <th scope="col">Fare</th>
+            <th scope="col">Departure Date</th>
+            <th scope="col">Departure Time</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for trip in trips %}
+        <tr class="post">
+            <td>{{ trip.username }}</td>
+            <td>{{ trip.origin }}</td>
+            <td>{{ trip.destination }}</td>
+            <td>{{ trip.seats - passenger_count.get(trip.id, 0) }}</td>
+            <td>${{ '%.2f'|format(trip.fare) }}</td>
+            <td>{{ trip.date }}</td>
+            <td>{{ trip.time }}</td>
+            <td><a href="/trips/{{ trip.id }}"><i class="fas fa-arrow-right"></i></a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

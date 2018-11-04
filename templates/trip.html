@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card" style="margin-bottom: 20px">
+    <div class="card mb-4">
         <div class="card-header">
             Trip Details
         </div>
@@ -18,18 +18,32 @@
             <p><b>Fare:</b> ${{ '%.2f'|format(trip.fare) }}</p>
             <p><b>Departure:</b> {{ trip.date }} at {{ trip.time }}</p>
             {% if passengers|length > 0 %}<p><b>Passengers: </b> {{ passengers|join(', ') }}</p>{% endif %}
-            {% if passengers|length < trip.seats %}
-            <form action="/trips/{{ trip.id }}" method="post">
-                <button type="submit" class="btn btn-success">Join</button>
-            </form>
-            {% endif %}
-            {% if trip.username == session['username'] %}
-            <form action="/trips/{{ trip.id }}/delete" method="post">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-            {% endif %}
+            <div class="btn-toolbar">
+                {% if trip.username != session['username'] and not session['username'] in passengers and passengers|length < trip.seats %}
+                 <div class="btn-group mr-2">
+                    <form action="/trips/{{ trip.id }}" method="post">
+                        <button type="submit" class="btn btn-success">Join</button>
+                    </form>
+                </div>
+                {% endif %}
+                {% if session['username'] in passengers %}
+                 <div class="btn-group mr-2">
+                    <form action="/trips/{{ trip.id }}/leave" method="post">
+                        <button type="submit" class="btn btn-info">Leave</button>
+                    </form>
+                </div>
+                {% endif %}
+                {% if trip.username == session['username'] %}
+                <div class="btn-group mr-2">
+                    <form action="/trips/{{ trip.id }}/delete" method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
 	  </div>
 	</div>
+
 	<iframe
 	    width="100%"
 	    height="480px"

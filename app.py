@@ -37,7 +37,7 @@ def distance(lat1, lon1, lat2, lon2):
 @app.route('/', methods=['GET'])
 def index():
     if session.get('username', None) is not None:
-        return redirect(url_for('trips'))
+        return redirect(url_for('my_trips'))
 
     return render_template('index.html')
 
@@ -62,7 +62,7 @@ def login():
         return redirect(url_for('trips'))
 
     if session.get('username', None) is not None:
-        return redirect(url_for('trips'))
+        return redirect(url_for('my_trips'))
 
     return render_template('login.html')
 
@@ -112,9 +112,9 @@ def trips():
         )
         return redirect(url_for('trip', id=id))
 
-    all_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
+    all_trips = database.fetchall('SELECT * FROM trips WHERE date >= date("now");')
     trips = list(map(get_trip_obj, all_trips))
-    passenger_count = dict(database.fetchall('SELECT id, COUNT(id) FROM carpools;'))
+    passenger_count = dict(database.fetchall('SELECT id, COUNT(*) FROM carpools GROUP BY id;'))
 
     radius = request.args.get('radius', 10)
     originLat = request.args.get('originLat', None)
@@ -128,6 +128,24 @@ def trips():
         trips = [trip for trip in trips if distance(trip['destinationLat'], trip['destinationLng'], float(destinationLat), float(destinationLng)) <= float(radius)]
 
     return render_template('trip_list.html', trips=trips, passenger_count=passenger_count, filter=request.args)
+
+
+@app.route('/my_trips', methods=['GET'])
+@login_required
+def my_trips():
+    username = session['username']
+
+    driver_trips = database.fetchall('SELECT * FROM trips WHERE username="{}";'.format(username))
+    driver_trips = list(map(get_trip_obj, driver_trips))
+
+    rider_trip_ids = database.fetchall('SELECT id FROM carpools WHERE username="{}";'.format(username))
+    rider_trip_ids = [t[0] for t in rider_trip_ids]
+    rider_trips = database.fetchall('SELECT * FROM trips WHERE id IN ({})'.format('"' + '","'.join(rider_trip_ids) + '"'))
+    rider_trips = list(map(get_trip_obj, rider_trips))
+
+    passenger_count = dict(database.fetchall('SELECT id, COUNT(*) FROM carpools GROUP BY id;'))
+
+    return render_template('my_trip_list.html', driver_trips=driver_trips, rider_trips=rider_trips, passenger_count=passenger_count)
 
 
 @app.route('/trips/new', methods=['GET'])
@@ -157,6 +175,19 @@ def trip(id=None):
     return render_template('trip.html', trip=trip, passengers=passengers)
 
 
+@app.route('/trips/<uuid:id>/leave', methods=['POST'])
+@login_required
+def leave_trip(id=None):
+    username = session['username']
+    trip = database.fetchone('SELECT * FROM trips WHERE id="{}";'.format(id))
+    if not trip:
+        return render_template('trips.html', error='Invalid trip ID')
+    trip = get_trip_obj(trip)
+
+    database.execute('DELETE FROM carpools WHERE id="{}" AND username="{}";'.format(id, username))
+    return redirect(url_for('trip', id=id))
+
+
 @app.route('/trips/<uuid:id>/delete', methods=['POST'])
 @login_required
 def delete_trip(id=None):
@@ -167,7 +198,7 @@ def delete_trip(id=None):
 
     database.execute('DELETE FROM trips WHERE id="{}";'.format(id))
     database.execute('DELETE FROM carpools WHERE id="{}";'.format(id))
-    return redirect(url_for('trips'))
+    return redirect(url_for('my_trips'))
 
 
 @app.errorhandler(404)

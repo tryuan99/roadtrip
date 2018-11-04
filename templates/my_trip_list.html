@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    My Trips
+{% endblock %}
+
+{% block header %}
+    My Trips
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Driver Trips</h5>
+            {% with trips=driver_trips %}
+                {% include 'trip_table.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Rider Trips</h5>
+            {% with trips=rider_trips %}
+                {% include 'trip_table.html' %}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}
