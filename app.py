@@ -59,7 +59,7 @@ def login():
             return render_template('login.html', error='Invalid username or password')
 
         session['username'] = username
-        return redirect(url_for('trips'))
+        return redirect(url_for('my_trips'))
 
     if session.get('username', None) is not None:
         return redirect(url_for('my_trips'))

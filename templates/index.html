@@ -6,9 +6,11 @@
 
 {% block body %}
     <div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <div class="jumbotron">
-            <h1 class="display-4">Roadtrip</h1>
-            <p class="lead">Roadtrip is a ride-sharing web app that puts drivers ahead of riders.</p>
+        <div class="jumbotron py-4">
+            <div style="display: flex; justify-content: center;">
+                <img src={{ url_for('static', filename='img/roadtrip.svg' ) }} width="40%" height="40%"/>
+            </div>
+            <p class="lead"><b>Roadtrip</b> is a ride-sharing web app that puts drivers ahead of riders.</p>
             <hr class="my-4">
             <p class="lead">
                 <a class="btn btn-primary btn-lg" href="/register">Register</a>

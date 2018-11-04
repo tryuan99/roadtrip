@@ -10,8 +10,10 @@
 
 {% block content %}
     <div class="card mb-4">
+        <div class="card-header">
+            Filter Trips
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Filter Trips</h5>
             <form action="/trips" method="get" class="form-inline">
                 <div class="form-group">
                     <input class="form-control" type="text" id="origin-input" name="origin" placeholder="Enter origin" value="{{ filter.origin }}">
