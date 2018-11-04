@@ -5,18 +5,22 @@
 {% endblock %}
 
 {% block header %}
-    Trip
+	<div style="display: flex; justify-content: space-between; align-items: center;">
+		<div>
+			Trip
+		</div>
+		<form action="/trips/{{ trip[0] }}" method="post">
+			<button type="submit" class="btn btn-success">Join</button>
+		</form>
+	</div>
 {% endblock %}
 
 {% block content %}
-<iframe
-    width="1024"
-    height="768"
-    frameborder="0"
-    src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBDCGlmrN7hyGol7t2X_L3P30rVXIc8KI8&origin={{ trip[2] }}&destination={{ trip[3] }}"
-    style="border:0;">
-</iframe>
-<form action="/trips/{{ trip[0] }}" method="post">
-	<button type="submit" class="btn btn-success">Join</button>
-</form>
+	<iframe
+	    width="100%"
+	    height="768"
+	    frameborder="0"
+	    src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyBDCGlmrN7hyGol7t2X_L3P30rVXIc8KI8&origin={{ trip[2] }}&destination={{ trip[3] }}"
+	    style="border: 0;">
+	</iframe>
 {% endblock %}
