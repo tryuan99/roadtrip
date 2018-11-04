@@ -3,5 +3,4 @@ Flask
 itsdangerous
 Jinja2
 MarkupSafe
-uuid
 Werkzeug

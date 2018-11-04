@@ -6,6 +6,7 @@
 
     <title>{% block title %}{% endblock %} - Roadtrip</title>
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/fontawesome.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/solid.min.css') }}">
@@ -14,5 +15,6 @@
     {% block body %}{% endblock %}
     <script text="src/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script text="src/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script text="src/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}&libraries=places"></script>
 </body>
 </html>

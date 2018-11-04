@@ -6,25 +6,27 @@
 
 
 {% block content %}
-<style>
-  div.required label:after {
-      content: " *";
-      color: red;
-  }
-</style>
-
 <form action="/trips" method="post">
     <div class="form-group required">
-        <label for="origin">Start Address</label>
-        <input class="form-control" type="text" name="origin" required>
+        <label for="origin">Origin</label>
+        <input class="form-control" type="text" id="origin-input" name="origin" required>
     </div>
     <div class="form-group required">
-        <label for="destination">Destination Address</label>
-        <input class="form-control" type="text" name="destination" required>
+        <label for="destination">Destination</label>
+        <input class="form-control" type="text" id="destination-input" name="destination" required>
     </div>
     <div class="form-group required">
         <label for="seats">Available Seats</label>
-        <input class="form-control" type="number" min="0" name="seats" required>
+        <input class="form-control" type="number" min="1" name="seats" required>
+    </div>
+    <div class="form-group required">
+        <label for="seats">Fare</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">$</div>
+            </div>
+            <input class="form-control" type="number" min="0" name="fare" required>
+        </div>
     </div>
     <div class="form-group required">
         <label for="seats">Departure Date</label>
@@ -36,4 +38,14 @@
     </div>
     <button type="submit" class="btn btn-success">Submit</button>
 </form>
+<script text="src/javascript">
+    const origin = document.getElementById('origin-input');
+    const destination = document.getElementById('destination-input');
+
+    const inputAutocomplete = new google.maps.places.Autocomplete(origin);
+    const destinationAutocomplete = new google.maps.places.Autocomplete(destination);
+
+    inputAutocomplete.setFields(['address_components'])
+    destinationAutocomplete.setFields(['address_components'])
+</script>
 {% endblock %}

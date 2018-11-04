@@ -1,11 +1,14 @@
 import sqlite3
 import sys
 
+from functools import wraps
+
 DATABASE_FILE = ':memory:'
 conn = sqlite3.connect(DATABASE_FILE, check_same_thread=False)
 
 
 def logger(f):
+    @wraps(f)
     def with_logger(*args, **kwargs):
         print("Executing query", *args, file=sys.stderr)
         return f(*args, **kwargs)
@@ -35,7 +38,8 @@ def init_database():
         CREATE TABLE users (username text PRIMARY KEY UNIQUE NOT NULL, password text NOT NULL, salt text NOT NULL);
         INSERT INTO users VALUES ('test', '52d42704a5b54ab6800cc2385c60c6dc62e80da8e4a98b3c6a28dd1fcaa6015a', 'e5db57d0fd6c4e6fbc4ace161beb855f');
     
-        CREATE TABLE trips (id uuid PRIMARY KEY UNIQUE NOT NULL, username text NOT NULL, origin text NOT NULL, destination text NOT NULL, seats int NOT NULL, date date NOT NULL, time time NOT NULL);
+        CREATE TABLE trips (id uuid PRIMARY KEY UNIQUE NOT NULL, username text NOT NULL, origin text NOT NULL, destination text NOT NULL, seats int NOT NULL, fare int NOT NULL, date date NOT NULL, time time NOT NULL);
+        INSERT INTO trips VALUES ("65c8d18d-8678-4f3f-b87d-dc3e47c5c732", "test", "apple hq, cupertino", "google hq, mountain view", "4", "5", "2019-05-02", "17:20");
     
         CREATE TABLE carpools (id uuid NOT NULL, username text NOT NULL);
     """)

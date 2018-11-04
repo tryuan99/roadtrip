@@ -23,7 +23,7 @@
                     </li>
                 {% endif %}
             </ul>
-            {% if session['username'] %}
+            {% if not session['username'] %}
                 <span class="navbar-text">Logged in as {{ session['username'] }}</span>
             {% endif %}
         </div>

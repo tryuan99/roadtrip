@@ -1,19 +1,29 @@
 from flask import *
+from functools import wraps
 from hashlib import sha256
+
 import config
 import database
 import uuid
 import requests
 
 app = Flask(__name__)
-app.secret_key = config.SECRET_KEY
+app.config.from_object('config')
+
+def login_required(f):
+    @wraps(f)
+    def with_login(*args, **kwargs):
+        if session.get('username', None) is None:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return with_login
+
 
 @app.route('/', methods=['GET'])
 def index():
-    if 'username' in session:
-        if session['username']:
-            return redirect(url_for('trips'))
-    session['username'] = None
+    if session.get('username', None) is not None:
+        return redirect(url_for('trips'))
+
     return render_template('index.html')
 
 
@@ -36,14 +46,15 @@ def login():
         session['username'] = username
         return redirect(url_for('trips'))
 
-    if session['username']:
+    if session.get('username', None) is not None:
         return redirect(url_for('trips'))
+
     return render_template('login.html')
 
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    session['username'] = None
+    session.pop('username', None)
     return redirect(url_for('index'))
 
 
@@ -63,6 +74,7 @@ def register():
 
 
 @app.route('/trips', methods=['GET', 'POST'])
+@login_required
 def trips():
     if request.method == 'POST':
         id = uuid.uuid4()
@@ -70,13 +82,14 @@ def trips():
         origin = request.form['origin']
         destination = request.form['destination']
         seats = request.form['seats']
+        fare = request.form['fare']
         date = request.form['date']
         time = request.form['time']
 
         database.execute(
-            'INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}");'.format(id, username, origin,
-                                                                                          destination, seats, date,
-                                                                                          time))
+            'INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}", "{}");'.format(id, username, origin,
+                                                                                          destination, seats, fare,
+                                                                                          date, time))
         return redirect(url_for('trip', id=id))
 
     available_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
@@ -84,11 +97,13 @@ def trips():
 
 
 @app.route('/trips/new', methods=['GET'])
+@login_required
 def new_trip():
     return render_template('trip_form.html')
 
 
 @app.route('/trips/<uuid:id>', methods=['GET', 'POST'])
+@login_required
 def trip(id=None):
     trip = database.fetchone('SELECT * FROM trips WHERE id="{}"'.format(id))
     if not trip:
@@ -109,5 +124,5 @@ def not_found(error):
 
 
 @app.errorhandler(500)
-def not_found(error):
+def error(error):
     return render_template('error.html', message=error), 500

@@ -12,6 +12,7 @@
             <th scope="col">Start</th>
             <th scope="col">Destination</th>
             <th scope="col">Seats</th>
+            <th scope="col">Fare</th>
             <th scope="col">Departure Date</th>
             <th scope="col">Departure Time</th>
             <th scope="col"></th>
@@ -24,8 +25,9 @@
                 <td>{{ trip[2] }}</td>
                 <td>{{ trip[3] }}</td>
                 <td>{{ trip[4] }}</td>
-                <td>{{ trip[5] }}</td>
+                <td>${{ trip[5] }}</td>
                 <td>{{ trip[6] }}</td>
+                <td>{{ trip[7] }}</td>
                 <td><a href="/trips/{{ trip[0] }}"><i class="fas fa-arrow-right"></i></a></td>
             </tr>
         {% endfor %}
