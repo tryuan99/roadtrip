@@ -9,26 +9,36 @@
 {% endblock %}
 
 {% block content %}
-    <div class="form-inline">
-        <label for="origin">Origin:</label>
-        <input class="form-group" type="text" id="origin-input" name="origin">
+    <div class="card" style="margin-bottom: 20px">
+    	<div class="card-header">
+            Filter Trips
+        </div>
+    	<div class="card-body">
+		    <form class="form-inline">
+		    	<div class="form-group">
+			        <input class="form-control" type="text" id="origin-input" name="origin" placeholder="Enter origin">
+			    </div>
 
-        <label for="destination">Destination:</label>
-        <input class="form-group" type="text" id="destination-input" name="destination">
+			    <div class="form-group mx-sm-3">
+			        <input class="form-control" type="text" id="destination-input" name="destination" placeholder="Enter destination">
+			    </div>
 
-        <form action="/trips" method="get">
-            <label for="radius">Radius(miles):</label>
-            <input class="form-group" type="number" min="0" id="radius" name="radius">
+		        <form action="/trips" method="get" class="form-inline">
+		        	<div class="form-group mx-sm-3">
+			            <input class="form-control" type="number" min="0" name="radius" placeholder="Enter radius (miles)">
+			        </div>
 
-            <input type="hidden" id="originLat-input" name="originLat">
-            <input type="hidden" id="originLng-input" name="originLng">
+		            <input type="hidden" id="originLat-input" name="originLat">
+		            <input type="hidden" id="originLng-input" name="originLng">
 
-            <input type="hidden" id="destinationLat-input" name="destinationLat">
-            <input type="hidden" id="destinationLng-input" name="destinationLng">
+		            <input type="hidden" id="destinationLat-input" name="destinationLat">
+		            <input type="hidden" id="destinationLng-input" name="destinationLng">
 
-            <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-    </div>
+		            <button type="submit" class="btn btn-success">Search</button>
+		        </form>
+		    </form>
+		</div>
+	</div>
     <table class="table table-striped table-hover">
         <thead>
         <tr>
