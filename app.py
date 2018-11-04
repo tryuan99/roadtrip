@@ -108,7 +108,8 @@ def trips():
 
     all_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
     trips = list(map(get_trip_obj, all_trips))
-    return render_template('trip_list.html', trips=trips)
+    passenger_count = dict(database.fetchall('SELECT id, COUNT(id) FROM carpools;'))
+    return render_template('trip_list.html', trips=trips, passenger_count=passenger_count)
 
 
 @app.route('/trips/new', methods=['GET'])
@@ -120,7 +121,7 @@ def new_trip():
 @app.route('/trips/<uuid:id>', methods=['GET', 'POST'])
 @login_required
 def trip(id=None):
-    trip = database.fetchone('SELECT * FROM trips WHERE id="{}"'.format(id))
+    trip = database.fetchone('SELECT * FROM trips WHERE id="{}";'.format(id))
     if not trip:
         return render_template('trips.html', error='Invalid trip ID')
     trip = get_trip_obj(trip)
@@ -128,10 +129,14 @@ def trip(id=None):
     if request.method == 'POST':
         username = session['username']
 
-        database.execute('INSERT INTO carpools VALUES ("{}", "{}")'.format(id, username))
-        return render_template('trip.html', trip=trip, success='Trip joined successfully')
+        database.execute('INSERT INTO carpools VALUES ("{}", "{}");'.format(id, username))
+        passengers = database.fetchall('SELECT username FROM carpools WHERE id="{}";'.format(id))
+        passengers = [p[0] for p in passengers]
+        return render_template('trip.html', trip=trip, passengers=passengers, success='Trip joined successfully')
 
-    return render_template('trip.html', trip=trip)
+    passengers = database.fetchall('SELECT username FROM carpools WHERE id="{}"'.format(id))
+    passengers = [p[0] for p in passengers]
+    return render_template('trip.html', trip=trip, passengers=passengers)
 
 
 @app.errorhandler(404)

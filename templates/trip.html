@@ -14,9 +14,10 @@
             Trip Details
         </div>
         <div class="card-body">
-            <p>{{ trip.username }} is driving from {{ trip.origin }} to {{ trip.destination }} with {{ trip.seats }} available seats.</p>
-            <p><b>Fare:</b> ${{ trip.fare }}</p>
+            <p>{{ trip.username }} is driving from {{ trip.origin }} to {{ trip.destination }} with {{ trip.seats - passengers|length }} seats remaining.</p>
+            <p><b>Fare:</b> ${{ '%.2f'|format(trip.fare) }}</p>
             <p><b>Departure:</b> {{ trip.date }} at {{ trip.time }}</p>
+            {% if passengers|length > 0 %}<p><b>Passengers: </b> {{ passengers|join(', ') }}</p>{% endif %}
             <form action="/trips/{{ trip.id }}" method="post">
                 <button type="submit" class="btn btn-success">Join</button>
             </form>

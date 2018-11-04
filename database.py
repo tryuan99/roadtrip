@@ -42,6 +42,7 @@ def init_database():
         INSERT INTO trips VALUES ("c31b2304-895c-4e5f-b3b4-2376b5ff8ada", "test", "Apple Campus, Cupertino, CA, USA", "37.33182000000001", "-122.03118", "Googleplex, Amphitheatre Parkway, Mountain View, CA, USA", "37.4219999", "-122.08405749999997", "4", "5.2", "2020-05-20", "17:20");
 
         CREATE TABLE carpools (id uuid NOT NULL, username text NOT NULL);
+        INSERT INTO carpools VALUES ("c31b2304-895c-4e5f-b3b4-2376b5ff8ada", "test");
     """)
     conn.commit()
 

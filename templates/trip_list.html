@@ -15,7 +15,7 @@
             <th scope="col">User</th>
             <th scope="col">Origin</th>
             <th scope="col">Destination</th>
-            <th scope="col">Seats</th>
+            <th scope="col">Seats Remaining</th>
             <th scope="col">Fare</th>
             <th scope="col">Departure Date</th>
             <th scope="col">Departure Time</th>
@@ -28,8 +28,8 @@
                 <td>{{ trip.username }}</td>
                 <td>{{ trip.origin }}</td>
                 <td>{{ trip.destination }}</td>
-                <td>{{ trip.seats }}</td>
-                <td>${{ trip.fare }}</td>
+                <td>{{ trip.seats - passenger_count[trip.id] }}</td>
+                <td>${{ '%.2f'|format(trip.fare) }}</td>
                 <td>{{ trip.date }}</td>
                 <td>{{ trip.time }}</td>
                 <td><a href="/trips/{{ trip.id }}"><i class="fas fa-arrow-right"></i></a></td>
