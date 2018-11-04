@@ -9,6 +9,26 @@
 {% endblock %}
 
 {% block content %}
+    <div class="form-inline">
+        <label for="origin">Origin:</label>
+        <input class="form-group" type="text" id="origin-input" name="origin">
+
+        <label for="destination">Destination:</label>
+        <input class="form-group" type="text" id="destination-input" name="destination">
+
+        <form action="/trips" method="get">
+            <label for="radius">Radius(miles):</label>
+            <input class="form-group" type="number" min="0" id="radius" name="radius">
+
+            <input type="hidden" id="originLat-input" name="originLat">
+            <input type="hidden" id="originLng-input" name="originLng">
+
+            <input type="hidden" id="destinationLat-input" name="destinationLat">
+            <input type="hidden" id="destinationLng-input" name="destinationLng">
+
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
     <table class="table table-striped table-hover">
         <thead>
         <tr>
