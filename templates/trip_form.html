@@ -11,10 +11,14 @@
         <label for="origin">Origin</label>
         <input class="form-control" type="text" id="origin-input" name="origin" required>
     </div>
+    <input type="hidden" id="originLat-input" name="originLat">
+    <input type="hidden" id="originLng-input" name="originLng">
     <div class="form-group required">
         <label for="destination">Destination</label>
         <input class="form-control" type="text" id="destination-input" name="destination" required>
     </div>
+    <input type="hidden" id="destinationLat-input" name="destinationLat">
+    <input type="hidden" id="destinationLng-input" name="destinationLng">
     <div class="form-group required">
         <label for="seats">Available Seats</label>
         <input class="form-control" type="number" min="1" name="seats" required>
@@ -25,7 +29,7 @@
             <div class="input-group-prepend">
                 <div class="input-group-text">$</div>
             </div>
-            <input class="form-control" type="number" min="0" name="fare" required>
+            <input class="form-control" type="number" min="0" step="0.01" name="fare" required>
         </div>
     </div>
     <div class="form-group required">
@@ -41,12 +45,21 @@
 <script text="src/javascript">
     function initMap() {
         function autocomplete(id) {
-            const input = document.getElementById(id);
+            const input = document.getElementById(id + '-input');
             const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.setFields(['geometry']);
+
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                const location = place.geometry.location;
+
+                document.getElementById(id + 'Lat-input').value = location.lat();
+                document.getElementById(id + 'Lng-input').value = location.lng();
+            });
         }
 
-        autocomplete('origin-input');
-        autocomplete('destination-input');
+        autocomplete('origin');
+        autocomplete('destination');
     }
 </script>
 <script text="src/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}&libraries=places&callback=initMap" async defer></script>

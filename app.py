@@ -19,6 +19,15 @@ def login_required(f):
     return with_login
 
 
+def get_trip_obj(record):
+    keys = [
+        'id', 'username', 'origin', 'originLat', 'originLng',
+        'destination', 'destinationLat', 'destinationLng',
+        'seats', 'fare', 'date', 'time'
+    ]
+    return dict(zip(keys, record))
+
+
 @app.route('/', methods=['GET'])
 def index():
     if session.get('username', None) is not None:
@@ -80,20 +89,26 @@ def trips():
         id = uuid.uuid4()
         username = session['username']
         origin = request.form['origin']
+        originLat = request.form['originLat']
+        originLng = request.form['originLng']
         destination = request.form['destination']
+        destinationLat = request.form['destinationLat']
+        destinationLng = request.form['destinationLng']
         seats = request.form['seats']
         fare = request.form['fare']
         date = request.form['date']
         time = request.form['time']
 
         database.execute(
-            'INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}", "{}");'.format(id, username, origin,
-                                                                                          destination, seats, fare,
-                                                                                          date, time))
+            'INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}", "{}", "{}", "{}", "{}", "{}", "{}", "{}");'.format(
+                id, username, origin, originLat, originLng, destination, destinationLat, destinationLng, seats, fare, date, time
+            )
+        )
         return redirect(url_for('trip', id=id))
 
-    available_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
-    return render_template('trip_list.html', trips=available_trips)
+    all_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
+    trips = list(map(get_trip_obj, all_trips))
+    return render_template('trip_list.html', trips=trips)
 
 
 @app.route('/trips/new', methods=['GET'])
@@ -108,6 +123,7 @@ def trip(id=None):
     trip = database.fetchone('SELECT * FROM trips WHERE id="{}"'.format(id))
     if not trip:
         return render_template('trips.html', error='Invalid trip ID')
+    trip = get_trip_obj(trip)
 
     if request.method == 'POST':
         username = session['username']
