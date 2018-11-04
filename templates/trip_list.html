@@ -67,4 +67,26 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <script text="src/javascript">
+        function initMap() {
+            function autocomplete(id) {
+                const input = document.getElementById(id + '-input');
+                const autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.setFields(['geometry']);
+
+                autocomplete.addListener('place_changed', function() {
+                    const place = autocomplete.getPlace();
+                    const location = place.geometry.location;
+
+                    document.getElementById(id + 'Lat-input').value = location.lat();
+                    document.getElementById(id + 'Lng-input').value = location.lng();
+                });
+            }
+
+            autocomplete('origin');
+            autocomplete('destination');
+        }
+    </script>
+    <script text="src/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}&libraries=places&callback=initMap" async defer></script>
 {% endblock %}
