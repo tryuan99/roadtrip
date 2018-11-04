@@ -39,13 +39,15 @@
     <button type="submit" class="btn btn-success">Submit</button>
 </form>
 <script text="src/javascript">
-    const origin = document.getElementById('origin-input');
-    const destination = document.getElementById('destination-input');
+    function initMap() {
+        function autocomplete(id) {
+            const input = document.getElementById(id);
+            const autocomplete = new google.maps.places.Autocomplete(input);
+        }
 
-    const inputAutocomplete = new google.maps.places.Autocomplete(origin);
-    const destinationAutocomplete = new google.maps.places.Autocomplete(destination);
-
-    inputAutocomplete.setFields(['address_components'])
-    destinationAutocomplete.setFields(['address_components'])
+        autocomplete('origin-input');
+        autocomplete('destination-input');
+    }
 </script>
+<script text="src/javascript" src="https://maps.googleapis.com/maps/api/js?key={{ config.MAPS_API_KEY }}&libraries=places&callback=initMap" async defer></script>
 {% endblock %}
