@@ -1,7 +1,7 @@
 from flask import *
 from functools import wraps
 from hashlib import sha256
-
+from math import cos, asin, sqrt
 import config
 import database
 import uuid
@@ -82,6 +82,13 @@ def register():
     return render_template('register.html')
 
 
+
+def distance(lat1, lon1, lat2, lon2):
+    p = 0.017453292519943295     #Pi/180
+    a = 0.5 - cos((lat2 - lat1) * p)/2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+    return 7917.5117 * asin(sqrt(a))
+
+
 @app.route('/trips', methods=['GET', 'POST'])
 @login_required
 def trips():
@@ -106,17 +113,27 @@ def trips():
         )
         return redirect(url_for('trip', id=id))
 
+    all_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
+    trips = list(map(get_trip_obj, all_trips))
+    passenger_count = dict(database.fetchall('SELECT id, COUNT(id) FROM carpools;'))
+
     radius = request.args.get('radius', None)
     originLat = request.args.get('originLat', None)
     originLng = request.args.get('originLng', None)
     destinationLat = request.args.get('destinationLat', None)
     destinationLng = request.args.get('destinationLng', None)
-
-    all_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now");')
-    trips = list(map(get_trip_obj, all_trips))
-    passenger_count = dict(database.fetchall('SELECT id, COUNT(id) FROM carpools;'))
-    return render_template('trip_list.html', trips=trips, passenger_count=passenger_count)
-
+    
+    # if any of the fields are null, return all
+    if not radius or not originLat or not originLng or not destinationLat or not destinationLng:
+        return render_template('trip_list.html', trips=trips, passenger_count=passenger_count)
+    else:
+        # else return valid trips
+        valid_trip_ls = [trip for trip in trips if distance(trip['originLat'], trip['originLng'], float(originLat), float(originLng)) <= float(radius) and distance(trip['destinationLat'], trip['destinationLng'], float(destinationLat), float(destinationLng)) <= float(radius)]
+        valid_trip_ids = [trip['id'] for trip in valid_trip_ls]
+        id_str = '"' + '","'.join(valid_trip_ids) + '"'
+        valid_trips = database.fetchall('SELECT * FROM trips WHERE DATE >= date("now") AND ID in ({});'.format(id_str))
+        return render_template('trip_list.html', trips=list(map(get_trip_obj, valid_trips)), passenger_count=passenger_count)
+    
 
 @app.route('/trips/new', methods=['GET'])
 @login_required
