@@ -3,6 +3,7 @@ from hashlib import sha256
 import config
 import database
 import uuid
+import requests
 
 app = Flask(__name__)
 app.secret_key = config.SECRET_KEY
