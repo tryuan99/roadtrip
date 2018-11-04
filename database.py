@@ -9,7 +9,6 @@ def logger(f):
     def with_logger(*args, **kwargs):
         print("Executing query", *args, file=sys.stderr)
         return f(*args, **kwargs)
-
     return with_logger
 
 

@@ -9,5 +9,7 @@
 {% endblock %}
 
 {% block content %}
-    Trip
+<form action="/trips/{{ trip[0] }}" method="post">
+	<button type="submit" class="btn btn-success">Join</button>
+</form>
 {% endblock %}

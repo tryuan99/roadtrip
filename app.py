@@ -52,6 +52,7 @@ def register():
 
         database.execute('INSERT INTO users VALUES ("{}", "{}", "{}");'.format(username, hashed_password, salt))
         return render_template('register.html', success='User registered successfully')
+
     return render_template('register.html')
 
 
@@ -81,9 +82,19 @@ def new_trip():
     return render_template('trip_form.html')
 
 
-@app.route('/trips/<id>', methods=['GET', 'POST'])
+@app.route('/trips/<uuid:id>', methods=['GET', 'POST'])
 def trip(id=None):
-    return render_template('trip.html')
+    trip = database.fetchone('SELECT * FROM trips WHERE id="{}"'.format(id))
+    if not trip:
+        return render_template('trips.html', error='Invalid trip ID')
+
+    if request.method == 'POST':
+        username = session['username']
+
+        database.execute('INSERT INTO carpools VALUES ("{}", "{}")'.format(id, username))
+        return render_template('trip.html', trip=trip, success='Trip joined successfully')
+
+    return render_template('trip.html', trip=trip)
 
 
 @app.errorhandler(404)
