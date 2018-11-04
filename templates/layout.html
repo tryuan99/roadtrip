@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -10,19 +10,21 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
     <script text="src/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script text="src/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-  </head>
-  <body>
-    {% include 'navbar.html' %}
+</head>
+<body>
+{% include 'navbar.html' %}
 
-    <div class="container">
-      <section class="header" style="margin-top: 80px">
-        {% if success %}<div class="alert alert-success">{{ success }}</div>{% endif %}
-        {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<div class="container">
+    <section class="header" style="margin-top: 80px">
+        {% if success %}
+            <div class="alert alert-success">{{ success }}</div>{% endif %}
+        {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>{% endif %}
         <h2>{% block header %}{% endblock %}</h2>
-      </section>
-      <section class="content">
+    </section>
+    <section class="content">
         {% block content %}{% endblock %}
-      </section>
-    </div>
-  </body>
+    </section>
+</div>
+</body>
 </html>
