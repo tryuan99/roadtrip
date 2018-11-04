@@ -157,6 +157,19 @@ def trip(id=None):
     return render_template('trip.html', trip=trip, passengers=passengers)
 
 
+@app.route('/trips/<uuid:id>/delete', methods=['POST'])
+@login_required
+def delete_trip(id=None):
+    trip = database.fetchone('SELECT * FROM trips WHERE id="{}";'.format(id))
+    if not trip:
+        return render_template('trips.html', error='Invalid trip ID')
+    trip = get_trip_obj(trip)
+
+    database.execute('DELETE FROM trips WHERE id="{}";'.format(id))
+    database.execute('DELETE FROM carpools WHERE id="{}";'.format(id))
+    return redirect(url_for('trips'))
+
+
 @app.errorhandler(404)
 def not_found(error):
     return render_template('not_found.html'), 404
