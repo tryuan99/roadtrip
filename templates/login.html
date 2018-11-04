@@ -1,23 +1,23 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-Login
+    Login
 {% endblock %}
 
 {% block header %}
-Login
+    Login
 {% endblock %}
 
 {% block content %}
-  <form action="/login" method="post">
-  	<div class="form-group">
-  		<label for="username">Username</label>
-  		<input type="text" class="form-control" name="username">
-  	</div>
-  	<div class="form-group">
-  		<label for="username">Password</label>
-  		<input type="password" class="form-control" name="password">
-  	</div>
-  	<button type="submit" class="btn btn-success">Login</button>
-  </form>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label for="username">Password</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+        <button type="submit" class="btn btn-success">Login</button>
+    </form>
 {% endblock %}
