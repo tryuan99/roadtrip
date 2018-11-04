@@ -62,15 +62,15 @@ def trips():
         username = session['username']
         origin = request.form['origin']
         destination = request.form['destination']
-        seats = request.form['username']
+        seats = request.form['seats']
 
-        database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}");'.format(id, username, origin, destination))
+        database.execute('INSERT INTO trips VALUES ("{}", "{}", "{}", "{}", "{}");'.format(id, username, origin, destination, seats))
         return redirect(url_for('trip', id=id))
 
     return render_template('trip_list.html')
 
 
-@app.route('/trips/new', methods=['GET', 'POST'])
+@app.route('/trips/new', methods=['GET'])
 def new_trip():
     return render_template('trip_form.html')
 
