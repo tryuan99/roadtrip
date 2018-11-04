@@ -3,4 +3,5 @@ Flask
 itsdangerous
 Jinja2
 MarkupSafe
+sqlite3
 Werkzeug
